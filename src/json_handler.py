@@ -33,7 +33,7 @@ logging.debug(f"Current Directory %% {CURRENT_DIRECTORY}")
 
 
 def __create_data_dir():
-	"""Creates the data dir './data' if it does not exist already."""
+	"""Creates the data directory './data' if it does not exist already."""
 	data_dir_path = Path(f"{CURRENT_DIRECTORY}/{DATA_DIR_NAME}")
 	logging.debug(f"Data Directory Path %% {data_dir_path}")
 	if not data_dir_path.is_dir():
@@ -41,6 +41,19 @@ def __create_data_dir():
 		logging.debug("Created Data Directory.")
 	else:
 		logging.debug("Prexisting Data Directory")
+
+def __read_file_b(file_path: str) -> bytes:
+	"""Reading arbitrary bytes to file."""
+	with file_path.open("rb") as file:
+			file_data = file.read()
+			logging.debug(f"Opened file at path %% {file_path}")
+			return file_data
+
+def __write_file_b(file_path: str, file_data: bytes):
+	"""Writing arbitrary bytes to file."""
+	with file_path.open("wb") as file:
+			file.write(file_data)
+			logging.debug(f"Wrote to file at path %% {file_path}")
 
 # write to file
 def add_item(item_description: str) -> int:
