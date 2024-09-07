@@ -66,7 +66,7 @@ def add_item(item_description: str) -> int:
 		file_dict = {"todo": item_dict}
 		json_data = orjson.dumps(file_dict)
 
-		with json_file_path.open("w") as file:
+		with json_file_path.open("wb") as file:
 			file.write(json_data)
 
 		
