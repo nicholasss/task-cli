@@ -60,7 +60,7 @@ def add_item(item_description: str) -> int:
 		item_id = 1
 		logging.debug(f"Item ID of {item_id} provided.")
 
-		item_status = Status.TODO
+		item_status = Status.To_Do
 		logging.debug(f"Status of '{item_status.value}' provided.")
 
 		item_dict = {
@@ -76,11 +76,13 @@ def add_item(item_description: str) -> int:
 		with json_file_path.open("wb") as file:
 			file.write(json_data)
 
-		
+
 
 	else:
 		logging.debug("JSON file exists, appending item.")
 		# open, deserialize, add item to array, write to file
+
+		logging.warning("Adding to a previously created list is not supported yet.")
 
 		# item ID is updated to be correct when added
 		item_id = 2
