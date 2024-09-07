@@ -29,8 +29,6 @@ logging.basicConfig(
 logging.info("Initializing json_handler.py")
 logging.debug(f"Current Directory %% {CURRENT_DIRECTORY}")
 
-# Goal is to provide objects for this module to serialize directly to the file
-
 
 def __create_data_dir():
 	"""Creates the data directory './data' if it does not exist already."""
@@ -62,7 +60,6 @@ def add_item(item_description: str) -> int:
 	__create_data_dir()
 
 	current_utc_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
-	item_id: int
 
 	json_file_path = Path(f"{CURRENT_DIRECTORY}/{DATA_DIR_NAME}/{JSON_DATA_NAME}")
 	logging.debug(f"JSON File Path %% {json_file_path}")
@@ -84,34 +81,23 @@ def add_item(item_description: str) -> int:
 
 		file_array = [item_dict]
 		json_data = orjson.dumps(file_array)
-
-		with json_file_path.open("wb") as file:
-			file.write(json_data)
-			logging.debug("Wrote one item to new JSON file.")
+		__write_file_b(json_file_path, json_data)
+		
+		logging.debug("Wrote one item to new JSON file.")
 
 	else:
-		logging.debug("JSON file exists, appending item.")
-		# open, deserialize, add item to array, write to file
+		logging.debug("Opened file to append a new item.")
 
-		logging.warning("Adding to a previously created list is not supported yet.")
-
-		with json_file_path.open("rb") as file:
-			previous_json_data = file.read()
-			logging.debug("Opened file to append a new item.")
-
+		previous_json_data = __read_file_b(json_file_path)
 		previous_file_array = orjson.loads(previous_json_data)
 		item_dict[ID_FN] = len(previous_file_array) + 1
 		logging.debug(f"Item ID of {item_dict[ID_FN]} provided.")
 		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 
-		print(previous_file_array)
-
 		previous_file_array.append(item_dict)
 		json_data = orjson.dumps(previous_file_array)
 
-		with json_file_path.open("wb") as file:
-			file.write(json_data)
-			logging.debug("Wrote new item to JSON file.")
+		__write_file_b(json_file_path, json_data)
 
 	return item_dict[ID_FN]
 
