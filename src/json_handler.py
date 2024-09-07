@@ -10,6 +10,8 @@ logging.basicConfig(
 
 logging.info("Initializing json_handler.py")
 
+# Goal is to provide objects for this module to serialize directly to the file
+
 # create file
 
 # load file
