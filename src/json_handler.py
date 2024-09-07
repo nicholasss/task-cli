@@ -40,16 +40,19 @@ def __create_data_dir():
 	else:
 		logging.debug("Prexisting Data Directory")
 
-def __read_file_b(file_path: str) -> bytes:
+def __read_file_data(file_path: str) -> list[dict[str: any]]:
 	"""Reading arbitrary bytes to file."""
 	with file_path.open("rb") as file:
 			file_data = file.read()
-			logging.debug(f"Opened file at path %% {file_path}")
-			return file_data
+			file_dict = orjson.loads(file_data)
 
-def __write_file_b(file_path: str, file_data: bytes):
+			logging.debug(f"Opened file at path %% {file_path}")
+			return file_dict
+
+def __write_file_data(file_path: str, file_dict: list[dict[str: any]]) -> None:
 	"""Writing arbitrary bytes to file."""
 	with file_path.open("wb") as file:
+			file_data = orjson.dumps(file_dict)
 			file.write(file_data)
 			logging.debug(f"Wrote to file at path %% {file_path}")
 
@@ -80,24 +83,20 @@ def add_item(item_description: str) -> int:
 		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 
 		file_array = [item_dict]
-		json_data = orjson.dumps(file_array)
-		__write_file_b(json_file_path, json_data)
+		__write_file_data()(json_file_path, file_array)
 		
 		logging.debug("Wrote one item to new JSON file.")
 
 	else:
 		logging.debug("Opened file to append a new item.")
 
-		previous_json_data = __read_file_b(json_file_path)
-		previous_file_array = orjson.loads(previous_json_data)
+		previous_file_array = __read_file_data(json_file_path)
 		item_dict[ID_FN] = len(previous_file_array) + 1
 		logging.debug(f"Item ID of {item_dict[ID_FN]} provided.")
 		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 
 		previous_file_array.append(item_dict)
-		json_data = orjson.dumps(previous_file_array)
-
-		__write_file_b(json_file_path, json_data)
+		__write_file_data(json_file_path, previous_file_array)
 
 	return item_dict[ID_FN]
 
