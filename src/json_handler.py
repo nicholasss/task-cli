@@ -54,29 +54,27 @@ def add_item(item_description: str) -> int:
 	json_file_path = Path(f"{CURRENT_DIRECTORY}/{DATA_DIR_NAME}/{JSON_DATA_NAME}")
 	logging.debug(f"JSON File Path %% {json_file_path}")
 
-	if not json_file_path.exists():
-		logging.debug("Creating JSON file.")
-
-		item_id = 1
-		logging.debug(f"Item ID of {item_id} provided.")
-
-		item_status = Status.To_Do
-		logging.debug(f"Status of '{item_status.value}' provided.")
-
-		item_dict = {
-			ID_FN: item_id,
+	item_dict = {
+			ID_FN: 0,
 			DESCR_FN: item_description,
-			STATU_FN: item_status,
+			STATU_FN: Status.To_Do, # Explicitly set to To_Do
 			CREAT_FN: current_utc_time,
 			UPDAT_FN: current_utc_time
 		}
-		file_dict = {"todo": item_dict}
-		json_data = orjson.dumps(file_dict)
+
+	if not json_file_path.exists():
+		logging.debug("Creating JSON file.")
+
+		item_dict[ID_FN] = 1
+		logging.debug(f"Item ID of {item_dict[ID_FN]} provided.")
+		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
+
+		file_array = [item_dict]
+		json_data = orjson.dumps(file_array)
 
 		with json_file_path.open("wb") as file:
 			file.write(json_data)
-
-
+			logging.debug("Wrote one item to new JSON file.")
 
 	else:
 		logging.debug("JSON file exists, appending item.")
@@ -84,11 +82,24 @@ def add_item(item_description: str) -> int:
 
 		logging.warning("Adding to a previously created list is not supported yet.")
 
-		# item ID is updated to be correct when added
-		item_id = 2
+		with json_file_path.open("rb") as file:
+			previous_json_data = file.read()
+			logging.debug("Opened file to append a new item.")
 
+		previous_file_array = orjson.loads(previous_json_data)
+		item_dict[ID_FN] = len(previous_file_array) + 1
+		logging.debug(f"Item ID of {item_dict[ID_FN]} provided.")
+		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 
+		print(previous_file_array)
 
-	return item_id
+		previous_file_array.append(item_dict)
+		json_data = orjson.dumps(previous_file_array)
+
+		with json_file_path.open("wb") as file:
+			file.write(json_data)
+			logging.debug("Wrote new item to JSON file.")
+
+	return item_dict[ID_FN]
 
 # load file
