@@ -9,6 +9,13 @@ DATA_DIR_NAME = "data"
 JSON_DATA_NAME = "todo_list.json"
 CURRENT_DIRECTORY = os.getcwd()
 
+ID_FN = "id"
+DESCR_FN = "description"
+STATU_FN = "status"
+CREAT_FN = "createdAt"
+UPDAT_FN = "updatedAt"
+
+
 class Status(Enum):
 	Done = "done"
 	To_Do = "todo"
@@ -57,11 +64,11 @@ def add_item(item_description: str) -> int:
 		logging.debug(f"Status of '{item_status.value}' provided.")
 
 		item_dict = {
-			"id": item_id,
-			"desc": item_description,
-			"status": item_status,
-			"createdAt": current_utc_time,
-			"updatedAt": current_utc_time
+			ID_FN: item_id,
+			DESCR_FN: item_description,
+			STATU_FN: item_status,
+			CREAT_FN: current_utc_time,
+			UPDAT_FN: current_utc_time
 		}
 		file_dict = {"todo": item_dict}
 		json_data = orjson.dumps(file_dict)
