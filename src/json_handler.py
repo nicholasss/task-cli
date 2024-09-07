@@ -10,9 +10,9 @@ JSON_DATA_NAME = "todo_list.json"
 CURRENT_DIRECTORY = os.getcwd()
 
 class Status(Enum):
-	DONE = "done"
-	TODO = "todo"
-	IN_PROGRESS = "in-progress"
+	Done = "done"
+	To_Do = "todo"
+	In_Progress = "in-progress"
 
 logging.basicConfig(
 	level=logging.DEBUG,
@@ -54,7 +54,7 @@ def add_item(item_description: str) -> int:
 		logging.debug(f"Item ID of {item_id} provided.")
 
 		item_status = Status.TODO
-		logging.debug(f"Status of {item_status} provided.")
+		logging.debug(f"Status of '{item_status.value}' provided.")
 
 		item_dict = {
 			"id": item_id,
