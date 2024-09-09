@@ -7,8 +7,8 @@ import orjson
 
 DATA_DIR_NAME = "data"
 CURRENT_DIRECTORY = os.getcwd()
-JSON_DATA_NAME = "todo_list.json"
-JSON_FILE_PATH = Path(f"{CURRENT_DIRECTORY}/{DATA_DIR_NAME}/{JSON_DATA_NAME}")
+__JSON_DATA_NAME = "todo_list.json"
+JSON_FILE_PATH = Path(f"{CURRENT_DIRECTORY}/{DATA_DIR_NAME}/{__JSON_DATA_NAME}")
 
 ID_FN = "id"
 DESCR_FN = "description"
@@ -23,11 +23,11 @@ class Status(Enum):
 	In_Progress = "in-progress"
 
 logging.basicConfig(
-	level=logging.INFO,
+	level=logging.DEBUG,
 	format="%(asctime)s %(levelname)s %(message)s"
 )
 
-logging.info("Initializing json_handler.py")
+logging.debug("Initializing json_handler.py")
 logging.debug(f"Current Directory %% {CURRENT_DIRECTORY}")
 
 
@@ -101,6 +101,7 @@ def add_item(item_description: str) -> int:
 	return item_dict[ID_FN]
 
 def list_items() -> list[str]:
+	"""Prints out a list of items in the todo_list json file."""
 	if not JSON_FILE_PATH.exists():
 		print("No items are in the list.")
 	
@@ -111,3 +112,20 @@ def list_items() -> list[str]:
 		print(" %%% Item List:")
 		for item in item_list:
 			print(f"ID: {item[ID_FN]}, Task: {item[DESCR_FN]}, Status: {item[STATU_FN]}")
+
+def update_item(item_id: int, item_desc: str) -> None:
+	"""Updates an item's description."""
+	logging.debug(f"Updating ID: {item_id} to Name '{item_desc}'")
+	
+	if not JSON_FILE_PATH.exists():
+		print("No items are in the list.")
+	
+	else:
+		item_list = __read_file_data(JSON_FILE_PATH)
+		logging.debug(f"Read from item list %% {JSON_FILE_PATH}")
+
+		for item in item_list:
+			if item[ID_FN] == item_id:
+				item[DESCR_FN] = item_desc
+
+		__write_file_data(JSON_FILE_PATH, item_list)
