@@ -3,7 +3,10 @@ import logging
 
 import json_handler as jh
 
+
+# Central logging level
 LOGGING_LEVEL = logging.DEBUG
+
 
 logging.basicConfig(
 	level=LOGGING_LEVEL,
