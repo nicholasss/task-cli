@@ -1,6 +1,9 @@
 # PROJECT
 data
 
+# EDITOR
+.vscode/
+
 #######################
 
 # Byte-compiled / optimized / DLL files
