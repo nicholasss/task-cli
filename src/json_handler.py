@@ -6,8 +6,9 @@ import orjson
 
 
 DATA_DIR_NAME = "data"
-JSON_DATA_NAME = "todo_list.json"
 CURRENT_DIRECTORY = os.getcwd()
+JSON_DATA_NAME = "todo_list.json"
+JSON_FILE_PATH = Path(f"{CURRENT_DIRECTORY}/{DATA_DIR_NAME}/{JSON_DATA_NAME}")
 
 ID_FN = "id"
 DESCR_FN = "description"
@@ -22,7 +23,7 @@ class Status(Enum):
 	In_Progress = "in-progress"
 
 logging.basicConfig(
-	level=logging.DEBUG,
+	level=logging.INFO,
 	format="%(asctime)s %(levelname)s %(message)s"
 )
 
@@ -64,8 +65,7 @@ def add_item(item_description: str) -> int:
 
 	current_utc_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
-	json_file_path = Path(f"{CURRENT_DIRECTORY}/{DATA_DIR_NAME}/{JSON_DATA_NAME}")
-	logging.debug(f"JSON File Path %% {json_file_path}")
+	logging.debug(f"JSON File Path %% {JSON_FILE_PATH}")
 
 	item_dict = {
 			ID_FN: 0,
@@ -75,7 +75,7 @@ def add_item(item_description: str) -> int:
 			UPDAT_FN: current_utc_time
 		}
 
-	if not json_file_path.exists():
+	if not JSON_FILE_PATH.exists():
 		logging.debug("Creating JSON file.")
 
 		item_dict[ID_FN] = 1
@@ -83,21 +83,31 @@ def add_item(item_description: str) -> int:
 		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 
 		file_array = [item_dict]
-		__write_file_data()(json_file_path, file_array)
+		__write_file_data()(JSON_FILE_PATH, file_array)
 		
 		logging.debug("Wrote one item to new JSON file.")
 
 	else:
 		logging.debug("Opened file to append a new item.")
 
-		previous_file_array = __read_file_data(json_file_path)
+		previous_file_array = __read_file_data(JSON_FILE_PATH)
 		item_dict[ID_FN] = len(previous_file_array) + 1
 		logging.debug(f"Item ID of {item_dict[ID_FN]} provided.")
 		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 
 		previous_file_array.append(item_dict)
-		__write_file_data(json_file_path, previous_file_array)
+		__write_file_data(JSON_FILE_PATH, previous_file_array)
 
 	return item_dict[ID_FN]
 
-# load file
+def list_items() -> list[str]:
+	if not JSON_FILE_PATH.exists():
+		print("No items are in the list.")
+	
+	else:
+		item_list = __read_file_data(JSON_FILE_PATH)
+		logging.debug(f"Read from item list %% {JSON_FILE_PATH}")
+
+		print(" %%% Item List:")
+		for item in item_list:
+			print(f"ID: {item[ID_FN]}, Task: {item[DESCR_FN]}, Status: {item[STATU_FN]}")
