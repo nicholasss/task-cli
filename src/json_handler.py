@@ -91,7 +91,13 @@ def add_item(item_description: str) -> int:
 		logging.debug("Opened file to append a new item.")
 
 		previous_file_array = __read_file_data(JSON_FILE_PATH)
-		item_dict[ID_FN] = len(previous_file_array) + 1
+
+		highest_item_id = 1
+		for item in previous_file_array:
+			if item[ID_FN] >= highest_item_id:
+				highest_item_id = item[ID_FN] + 1
+		item_dict[ID_FN] = highest_item_id
+		
 		logging.debug(f"Item ID of {item_dict[ID_FN]} provided.")
 		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 
@@ -128,4 +134,20 @@ def update_item(item_id: int, item_desc: str) -> None:
 			if item[ID_FN] == item_id:
 				item[DESCR_FN] = item_desc
 
+		__write_file_data(JSON_FILE_PATH, item_list)
+
+def delete_item(item_id: int) -> None:
+	"""Deletes a specific item from the list."""
+	logging.debug(f"Deleting ID: {item_id}")
+
+	if not JSON_FILE_PATH.exists():
+		print("No items are in the list.")
+	
+	else:
+		item_list = __read_file_data(JSON_FILE_PATH)
+		logging.debug(f"Read from item list %% {JSON_FILE_PATH}")
+
+		for item in item_list:
+			if item[ID_FN] == item_id:
+				item_list.remove(item)
 		__write_file_data(JSON_FILE_PATH, item_list)
