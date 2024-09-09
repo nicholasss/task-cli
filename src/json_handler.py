@@ -4,6 +4,8 @@ from enum import Enum
 
 import orjson
 
+from main import LOGGING_LEVEL
+
 
 DATA_DIR_NAME = "data"
 CURRENT_DIRECTORY = os.getcwd()
@@ -23,7 +25,7 @@ class Status(Enum):
 	In_Progress = "in-progress"
 
 logging.basicConfig(
-	level=logging.DEBUG,
+	level=LOGGING_LEVEL, # Set in main.py
 	format="%(asctime)s %(levelname)s %(message)s"
 )
 
@@ -97,7 +99,7 @@ def add_item(item_description: str) -> int:
 			if item[ID_FN] >= highest_item_id:
 				highest_item_id = item[ID_FN] + 1
 		item_dict[ID_FN] = highest_item_id
-		
+
 		logging.debug(f"Item ID of {item_dict[ID_FN]} provided.")
 		logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 

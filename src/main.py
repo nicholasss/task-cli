@@ -3,8 +3,10 @@ import logging
 
 import json_handler as jh
 
+LOGGING_LEVEL = logging.DEBUG
+
 logging.basicConfig(
-	level=logging.DEBUG,
+	level=LOGGING_LEVEL,
 	format="%(asctime)s %(levelname)s %(message)s"
 )
 
