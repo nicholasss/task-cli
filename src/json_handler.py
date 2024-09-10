@@ -4,8 +4,8 @@ from enum import Enum
 
 import orjson
 
-from main import LOGGING_LEVEL
 
+LOGGING_LEVEL = logging.DEBUG
 
 DATA_DIR_NAME = "data"
 CURRENT_DIRECTORY = os.getcwd()
@@ -25,7 +25,7 @@ class Status(Enum):
 	In_Progress = "in-progress"
 
 logging.basicConfig(
-	level=LOGGING_LEVEL, # Set in main.py
+	level=LOGGING_LEVEL,
 	format="%(asctime)s %(levelname)s %(message)s"
 )
 
