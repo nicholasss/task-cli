@@ -27,13 +27,8 @@ class Status(Enum):
 
 
 logging.basicConfig(
-    << << << < HEAD
-    level=LOGGING_LEVEL,
-    format="%(asctime)s %(levelname)s %(message)s"
-    == == == =
     level=LOGGING_LEVEL,  # Set in main.py
     format="%(asctime)s %(levelname)s %(message)s",
-    >>>>>> > 90326ac (formatted via lazyvim... and removed the circular import)
 )
 
 logging.debug("Initializing json_handler.py")
