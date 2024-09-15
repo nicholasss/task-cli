@@ -114,7 +114,7 @@ def add_item(item_description: str) -> int:
     return item_dict[ID_FN]
 
 
-def list_items() -> list[str]:
+def list_items() -> None:
     """Prints out a list of items in the todo_list json file."""
     if not JSON_FILE_PATH.exists():
         print("No items are in the list.")
@@ -126,9 +126,12 @@ def list_items() -> list[str]:
         print(" %%% Item List:")
         for item in item_list:
             print(
-                f"ID: {item[ID_FN]}, Task: {
-                    item[DESCR_FN]}, Status: {item[STATU_FN]}"
+                f"ID: {item[ID_FN]}, Task: {item[DESCR_FN]}, Status: {item[STATU_FN]}"
             )
+
+
+def list_conditional_items(status: str) -> None:
+    pass
 
 
 def update_item(item_id: int, item_desc: str) -> None:
