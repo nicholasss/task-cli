@@ -144,6 +144,8 @@ def list_conditional_items(item_type: str) -> None:
 
 def update_item(item_id: int, item_desc: str) -> None:
     """Updates an item's description."""
+    current_utc_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
+
     logging.debug(f"Updating ID: {item_id} to Name '{item_desc}'")
 
     if not JSON_FILE_PATH.exists():
@@ -156,6 +158,9 @@ def update_item(item_id: int, item_desc: str) -> None:
         for item in item_list:
             if item[ID_FN] == item_id:
                 item[DESCR_FN] = item_desc
+                item[UPDAT_FN] = current_utc_time
+                
+                print(f" %%% Item {item_id} was updated.")
 
         __write_file_data(JSON_FILE_PATH, item_list)
 
