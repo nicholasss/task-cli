@@ -37,16 +37,19 @@ if args.add:
     print(f" %%% Item added successfully. (ID: {added_item_id})")
 
 if args.list:
-	list_arg = args.list
-	if list_arg == 'all':
-		logging.debug("'--list' argument found.")
-		jh.list_items()
-	elif list_arg == 'done':
-		logging.debug("'--list done' argument found.")
-	elif list_arg == 'todo':
-		logging.debug("'--list todo' argument found.")
-	elif list_arg == 'in-progress':
-		logging.debug("'--list in-progress' argument found.")
+    list_arg = args.list
+    if list_arg == 'all':
+        logging.debug("'--list' argument found.")
+        jh.list_items()
+    elif list_arg == 'done':
+        logging.debug("'--list done' argument found.")
+        jh.list_conditional_items('done')
+    elif list_arg == 'todo':
+        logging.debug("'--list todo' argument found.")
+        jh.list_conditional_items('todo')
+    elif list_arg == 'in-progress':
+        logging.debug("'--list in-progress' argument found.")
+        jh.list_conditional_items('in-progress')
 
 if args.update:
     logging.debug("'--update' argument found.")

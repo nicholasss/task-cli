@@ -90,7 +90,7 @@ def add_item(item_description: str) -> int:
         logging.debug(f"Status of '{item_dict[STATU_FN]}' provided.")
 
         file_array = [item_dict]
-        __write_file_data()(JSON_FILE_PATH, file_array)
+        __write_file_data(JSON_FILE_PATH, file_array)
 
         logging.debug("Wrote one item to new JSON file.")
 
@@ -118,7 +118,6 @@ def list_items() -> None:
     """Prints out a list of items in the todo_list json file."""
     if not JSON_FILE_PATH.exists():
         print("No items are in the list.")
-
     else:
         item_list = __read_file_data(JSON_FILE_PATH)
         logging.debug(f"Read from item list %% {JSON_FILE_PATH}")
@@ -130,8 +129,17 @@ def list_items() -> None:
             )
 
 
-def list_conditional_items(status: str) -> None:
-    pass
+def list_conditional_items(item_type: str) -> None:
+    if not JSON_FILE_PATH.exists():
+        print("No items are in the list.")
+    else:
+        item_list = __read_file_data(JSON_FILE_PATH)
+        logging.debug(f"Read from item list %% {JSON_FILE_PATH}")
+        print(f" %%% {item_type} items:")
+        
+        for item in item_list:
+            if item[STATU_FN] == item_type:
+                print(f"ID: {item[ID_FN]}, Task: {item[DESCR_FN]}, Status: {item[STATU_FN]}")
 
 
 def update_item(item_id: int, item_desc: str) -> None:
