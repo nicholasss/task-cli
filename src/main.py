@@ -28,6 +28,8 @@ parser.add_argument(
 parser.add_argument(
     "-d", "--delete", help="Deletes specified task.", metavar="ID")
 
+# TODO: Add a argument for marking the items a different status
+
 args = parser.parse_args()
 logging.debug(f'Arguments passed are %% "{args}"')
 
