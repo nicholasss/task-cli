@@ -2,6 +2,7 @@ import argparse
 import logging
 
 import json_handler as jh
+from utils import *
 
 
 LOGGING_LEVEL = logging.DEBUG
@@ -24,6 +25,14 @@ parser.add_argument(
     help="Update description of specified task.",
     nargs=2,
     metavar=("ID", "Description"),
+)
+parser.add_argument(
+    "-md", "--mark-done", help="Mark an item as done.", metavar="ID")
+parser.add_argument(
+    "-mip", "--mark-in-progress", help="Mark an item as in-progress.", metavar='ID'
+)
+parser.add_argument(
+    "-mt", "--mark-todo", help="Mark an item as to-do.", metavar="ID"
 )
 parser.add_argument(
     "-d", "--delete", help="Deletes specified task.", metavar="ID")
@@ -57,7 +66,11 @@ if args.update:
     logging.debug("'--update' argument found.")
     if not args.update[0].isdigit():
         logging.warning("First argument needs to be a task id.")
-    jh.update_item(int(args.update[0]), args.update[1])
+    jh.update_item_desc(int(args.update[0]), args.update[1])
+
+if args.mark_done:
+    logging.debug("'--mark-done' arugment found.")
+    jh.update_item_status(int(args.mark_done), Status.Done)
 
 if args.delete:
     logging.debug("'--delete' argument found.")

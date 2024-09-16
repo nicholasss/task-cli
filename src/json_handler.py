@@ -1,9 +1,10 @@
 import datetime
 import logging
 import os
-from enum import Enum
 from pathlib import Path
 import orjson
+
+from utils import *
 
 
 LOGGING_LEVEL = logging.DEBUG
@@ -18,12 +19,6 @@ DESCR_FN = "description"
 STATU_FN = "status"
 CREAT_FN = "createdAt"
 UPDAT_FN = "updatedAt"
-
-
-class Status(Enum):
-    Done = "done"
-    To_Do = "todo"
-    In_Progress = "in-progress"
 
 
 logging.basicConfig(
@@ -142,7 +137,28 @@ def list_conditional_items(item_type: str) -> None:
                 print(f"ID: {item[ID_FN]}, Task: {item[DESCR_FN]}, Status: {item[STATU_FN]}")
 
 
-def update_item(item_id: int, item_desc: str) -> None:
+def update_item_status(item_id: id, new_item_status: Status) -> None:
+    """Updates an item's status."""
+    current_utc_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    logging.debug(f"Updating ID: {item_id} to new Status: '{new_item_status}'.")
+
+    if not JSON_FILE_PATH.exists():
+        print("No items are in the file.")
+    
+    else:
+        item_list = __read_file_data(JSON_FILE_PATH)
+        logging.debug(f"Read from item list %% {JSON_FILE_PATH}")
+
+        for item in item_list:
+            if item[ID_FN] == item_id:
+                item[STATU_FN] = new_item_status.value
+                item[UPDAT_FN] = current_utc_time
+
+                print(f" %%% Item {item_id} was updated.")
+        
+        __write_file_data(JSON_FILE_PATH, item_list)
+
+def update_item_desc(item_id: int, item_desc: str) -> None:
     """Updates an item's description."""
     current_utc_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
