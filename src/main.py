@@ -72,6 +72,14 @@ if args.mark_done:
     logging.debug("'--mark-done' arugment found.")
     jh.update_item_status(int(args.mark_done), Status.Done)
 
+if args.mark_in_progress:
+    logging.debug("'--mark-in-progress' arugment found.")
+    jh.update_item_status(int(args.mark_in_progress), Status.In_Progress)
+
+if args.mark_todo:
+    logging.debug("'--mark-todo' arugment found.")
+    jh.update_item_status(int(args.mark_todo), Status.To_Do)
+
 if args.delete:
     logging.debug("'--delete' argument found.")
     if not args.delete.isdigit():
